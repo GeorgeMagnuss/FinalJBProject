@@ -6,7 +6,7 @@ from django.utils import timezone
 
 
 class Role(models.Model):
-    """Role model for user permissions"""
+    """Role model for user permissions - points to shared vacation database table"""
     ROLE_CHOICES = [
         ('admin', 'Admin'),
         ('user', 'User'),
@@ -43,7 +43,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractUser):
-    """Custom user model using email as username"""
+    """Custom user model using email as username - points to shared vacation database table"""
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(max_length=100, unique=True)
@@ -72,7 +72,7 @@ class User(AbstractUser):
 
 
 class Country(models.Model):
-    """Country model for vacation destinations"""
+    """Country model for vacation destinations - points to shared vacation database table"""
     country_name = models.CharField(max_length=100, unique=True)
     
     def __str__(self) -> str:
@@ -84,7 +84,7 @@ class Country(models.Model):
 
 
 class Vacation(models.Model):
-    """Vacation package model"""
+    """Vacation package model - points to shared vacation database table"""
     country = models.ForeignKey(
         Country, 
         on_delete=models.CASCADE,
@@ -127,7 +127,7 @@ class Vacation(models.Model):
 
 
 class Like(models.Model):
-    """Like relationship between users and vacations"""
+    """Like relationship between users and vacations - points to shared vacation database table"""
     user = models.ForeignKey(
         User, 
         on_delete=models.CASCADE,

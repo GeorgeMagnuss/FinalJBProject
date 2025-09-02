@@ -137,7 +137,11 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Use vacation website's User model
 AUTH_USER_MODEL = 'stats.User'
+
+# Database table mapping to match vacation website  
+DATABASE_ROUTERS = []
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
