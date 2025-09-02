@@ -34,9 +34,13 @@ services:
       - ./vacation_website/VacationProjectGM/media:/app/media
     command: >
       sh -c "
+      echo 'Starting vacation website...' &&
       sleep 10 && 
+      echo 'Running migrations...' &&
       python manage.py migrate --run-syncdb && 
-      python manage.py populate_db || true && 
+      echo 'Populating database...' &&
+      python manage.py populate_db || echo 'Database already populated' && 
+      echo 'Starting Django server...' &&
       python manage.py runserver 0.0.0.0:8000"
 
   stats_backend:
@@ -55,8 +59,11 @@ services:
       - DB_PORT=5432
     command: >
       sh -c "
+      echo 'Starting stats backend...' &&
       sleep 15 && 
+      echo 'Running stats migrations...' &&
       python manage.py migrate --run-syncdb && 
+      echo 'Starting stats Django server...' &&
       python manage.py runserver 0.0.0.0:8001"
 
   stats_frontend:
