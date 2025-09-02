@@ -29,7 +29,20 @@ sleep 30
 echo "🏖️  Starting vacation website..."
 sudo docker-compose up -d vacation_website
 
-sleep 25
+# Wait for vacation website to be ready with health check
+echo "⏳ Waiting for vacation website to be ready..."
+max_attempts=30
+attempt=0
+while ! curl -s http://localhost:8000 > /dev/null; do
+    attempt=$((attempt + 1))
+    if [ $attempt -gt $max_attempts ]; then
+        echo "❌ Vacation website failed to start after $max_attempts attempts"
+        exit 1
+    fi
+    echo "   - Website not yet available, waiting 5 seconds... (attempt $attempt/$max_attempts)"
+    sleep 5
+done
+echo "✅ Vacation website is up and ready!"
 
 # Create admin user
 echo "👤 Creating admin user..."
@@ -58,13 +71,41 @@ print(f'✅ Admin user ready: {admin_user.email}')
 echo "📈 Starting stats backend with migration fix..."
 sudo docker-compose up -d stats_backend
 
-sleep 25
+# Wait for stats backend to be ready with health check
+echo "⏳ Waiting for stats backend to be ready..."
+max_attempts=30
+attempt=0
+while ! curl -s http://localhost:8001/api/ > /dev/null; do
+    attempt=$((attempt + 1))
+    if [ $attempt -gt $max_attempts ]; then
+        echo "❌ Stats backend failed to start after $max_attempts attempts"
+        echo "📋 Stats backend logs:"
+        sudo docker-compose logs --tail=10 stats_backend
+        exit 1
+    fi
+    echo "   - Stats backend not yet available, waiting 5 seconds... (attempt $attempt/$max_attempts)"
+    sleep 5
+done
+echo "✅ Stats backend is up and ready!"
 
 # Start stats frontend
 echo "🎨 Starting stats frontend..."
 sudo docker-compose up -d stats_frontend
 
-sleep 15
+# Wait for stats frontend to be ready with health check
+echo "⏳ Waiting for stats frontend to be ready..."
+max_attempts=20
+attempt=0
+while ! curl -s http://localhost:3000 > /dev/null; do
+    attempt=$((attempt + 1))
+    if [ $attempt -gt $max_attempts ]; then
+        echo "❌ Stats frontend failed to start after $max_attempts attempts"
+        exit 1
+    fi
+    echo "   - Frontend not yet available, waiting 5 seconds... (attempt $attempt/$max_attempts)"
+    sleep 5
+done
+echo "✅ Stats frontend is up and ready!"
 
 # Final verification
 echo ""
