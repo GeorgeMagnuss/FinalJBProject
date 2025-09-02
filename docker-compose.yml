@@ -56,9 +56,6 @@ services:
     image: georgem94/stats-frontend:latest
     ports:
       - "3000:3000"
-    environment:
-      - REACT_APP_API_URL=http://13.53.38.63:8001/api
-      - REACT_APP_BACKEND_URL=http://13.53.38.63:8001
     depends_on:
       - stats_backend
       - vacation_website
