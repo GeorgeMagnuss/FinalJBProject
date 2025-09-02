@@ -33,7 +33,11 @@ services:
     volumes:
       - ./vacation_website/VacationProjectGM/media:/app/media
     command: >
-      sh -c "python manage.py runserver 0.0.0.0:8000"
+      sh -c "
+      sleep 10 && 
+      python manage.py migrate --run-syncdb && 
+      python manage.py populate_db || true && 
+      python manage.py runserver 0.0.0.0:8000"
 
   stats_backend:
     image: georgem94/stats-backend:latest
@@ -50,7 +54,10 @@ services:
       - DB_PASSWORD=password
       - DB_PORT=5432
     command: >
-      sh -c "python manage.py runserver 0.0.0.0:8001"
+      sh -c "
+      sleep 15 && 
+      python manage.py migrate --run-syncdb && 
+      python manage.py runserver 0.0.0.0:8001"
 
   stats_frontend:
     image: georgem94/stats-frontend:latest
