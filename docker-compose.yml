@@ -35,12 +35,16 @@ services:
     command: >
       sh -c "
       echo 'Starting vacation website...' &&
-      sleep 10 && 
+      until pg_isready -h db -p 5432 -U postgres; do
+        echo 'Waiting for database...'
+        sleep 2
+      done &&
+      echo 'Database is ready!' &&
       echo 'Running migrations...' &&
       python manage.py migrate --run-syncdb && 
       echo 'Populating database...' &&
       python manage.py populate_db || echo 'Database already populated' && 
-      echo 'Starting Django server...' &&
+      echo 'Starting Django server on 0.0.0.0:8000...' &&
       python manage.py runserver 0.0.0.0:8000"
 
   stats_backend:
@@ -60,10 +64,14 @@ services:
     command: >
       sh -c "
       echo 'Starting stats backend...' &&
-      sleep 15 && 
+      until pg_isready -h db -p 5432 -U postgres; do
+        echo 'Waiting for database...'
+        sleep 2
+      done &&
+      sleep 5 &&
       echo 'Running stats migrations...' &&
       python manage.py migrate --run-syncdb && 
-      echo 'Starting stats Django server...' &&
+      echo 'Starting stats Django server on 0.0.0.0:8001...' &&
       python manage.py runserver 0.0.0.0:8001"
 
   stats_frontend:
