@@ -39,14 +39,21 @@ projectRoot/
 - Docker and Docker Compose installed
 - Ports 3000, 8000, 8001, and 5432 available
 
-### Run with Docker Compose
+### Quick Start
 
 ```bash
-docker-compose up --build
+# Use the deployment script
+./deploy.sh
+```
+
+### Manual Deployment
+
+```bash
+docker-compose up -d
 ```
 
 This will start all services:
-- **Database:** PostgreSQL on port 5432
+- **Database:** PostgreSQL on port 5432  
 - **Vacation Website:** http://localhost:8000
 - **Stats Backend API:** http://localhost:8001
 - **Stats Frontend:** http://localhost:3000
@@ -77,11 +84,55 @@ The system uses a shared PostgreSQL database with the following tables:
 - `vacations` - Vacation packages
 - `likes` - User likes for vacations
 
-## Notes for AWS EC2 Deployment
+## AWS EC2 Deployment
 
-1. Upload Docker images to Docker Hub
-2. Pull and run with Docker Compose on EC2
-3. Configure security groups for ports 3000 and 8000
-4. Access via EC2 public IP:
-   - Vacation site: `http://<EC2_IP>:8000`
-   - Statistics site: `http://<EC2_IP>:3000`
+### Prerequisites
+- EC2 instance with Docker and Docker Compose installed
+- Security groups configured for ports 3000, 8000, 8001, and 5432
+
+### Deployment Steps
+
+1. **Upload to EC2:**
+   ```bash
+   scp -i your-key.pem docker-compose.yml ubuntu@<EC2_IP>:~/
+   scp -i your-key.pem deploy.sh ubuntu@<EC2_IP>:~/
+   ```
+
+2. **Deploy on EC2:**
+   ```bash
+   ssh -i your-key.pem ubuntu@<EC2_IP>
+   chmod +x deploy.sh
+   ./deploy.sh
+   ```
+
+3. **Access Applications:**
+   - **Vacation Management:** `http://<EC2_IP>:8000`
+   - **Statistics Dashboard:** `http://<EC2_IP>:3000`
+
+### Docker Images
+Pre-built multi-platform images available on Docker Hub:
+- `georgem94/vacation-website:latest`
+- `georgem94/stats-backend:latest`  
+- `georgem94/stats-frontend:latest`
+
+## Project Features
+
+### Vacation Website (Port 8000)
+- Browse vacation packages
+- User registration and authentication
+- Like/unlike vacation packages
+- Admin panel for managing vacations
+
+### Statistics Dashboard (Port 3000)
+- Admin-only access
+- Real-time vacation statistics
+- User engagement metrics
+- Likes distribution analysis
+
+## Resolved Issues
+
+✅ **Database Migration Conflicts** - Implemented unmanaged models for stats backend  
+✅ **Frontend API Communication** - Fixed URL routing with `/api/` prefix  
+✅ **Authentication Failures** - Corrected admin user password and role relationships  
+✅ **Docker Multi-platform Support** - Built for both AMD64 and ARM64 architectures  
+✅ **Production Configuration** - Environment-specific API URLs and CORS settings

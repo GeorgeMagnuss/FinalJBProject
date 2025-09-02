@@ -23,6 +23,7 @@ class Role(models.Model):
     
     class Meta:
         db_table = 'roles'
+        managed = False
 
 
 class UserManager(BaseUserManager):
@@ -69,6 +70,7 @@ class User(AbstractUser):
     
     class Meta:
         db_table = 'users'
+        managed = False
 
 
 class Country(models.Model):
@@ -81,6 +83,7 @@ class Country(models.Model):
     class Meta:
         db_table = 'countries'
         verbose_name_plural = 'countries'
+        managed = False
 
 
 class Vacation(models.Model):
@@ -124,6 +127,7 @@ class Vacation(models.Model):
     class Meta:
         db_table = 'vacations'
         ordering = ['start_date']
+        managed = False
 
 
 class Like(models.Model):
@@ -145,3 +149,4 @@ class Like(models.Model):
     class Meta:
         db_table = 'likes'
         unique_together = ['user', 'vacation']
+        managed = False
