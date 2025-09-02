@@ -14,18 +14,40 @@ from .models import User, Vacation, Like
 @require_http_methods(["POST"])
 def login_view(request):
     """Login endpoint for admin users only"""
+    print(f"🔍 LOGIN VIEW: Received {request.method} request")
+    print(f"   Content-Type: {request.content_type}")
+    print(f"   Request body: {request.body}")
+    
     try:
         data = json.loads(request.body)
         email = data.get('email')
         password = data.get('password')
         
+        print(f"📧 Parsed email: {email}")
+        print(f"🔑 Parsed password: {'*' * len(password) if password else None}")
+        
         user = authenticate(request, username=email, password=password)
-        if user and user.is_admin:
-            login(request, user)
-            return JsonResponse({'success': True, 'message': 'Login successful'})
+        print(f"🔐 authenticate() returned: {user}")
+        
+        if user:
+            print(f"✅ User found: {user.email}")
+            print(f"   Is admin: {user.is_admin}")
+            print(f"   Is active: {user.is_active}")
+            print(f"   Is staff: {user.is_staff}")
+            
+            if user.is_admin:
+                print("✅ User is admin - logging in")
+                login(request, user)
+                return JsonResponse({'success': True, 'message': 'Login successful'})
+            else:
+                print("❌ User is not admin")
+                return JsonResponse({'success': False, 'message': 'Not an admin user'}, status=401)
         else:
+            print("❌ authenticate() returned None")
             return JsonResponse({'success': False, 'message': 'Invalid credentials or not admin'}, status=401)
+            
     except Exception as e:
+        print(f"❌ Exception in login_view: {e}")
         return JsonResponse({'success': False, 'message': str(e)}, status=400)
 
 
