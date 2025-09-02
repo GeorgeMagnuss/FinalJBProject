@@ -39,7 +39,7 @@ services:
       - DB_PORT=5432
     volumes:
       - ./vacation_website/VacationProjectGM/media:/app/media
-    command: sh -c 'python manage.py migrate && python manage.py populate_db || true && python manage.py runserver 0.0.0.0:8000'
+    command: sh -c 'python manage.py migrate && python manage.py populate_db && python manage.py runserver 0.0.0.0:8000'
 
   stats_backend:
     image: georgem94/stats-backend:latest
@@ -59,7 +59,7 @@ services:
       - DB_PORT=5432
     volumes:
       - ./stats_website/backend/stats:/app/stats
-    command: sh -c 'python manage.py runserver 0.0.0.0:8001'
+    command: sh -c 'python manage.py collectstatic --noinput || true && python manage.py runserver 0.0.0.0:8001'
 
   stats_frontend:
     image: georgem94/stats-frontend:latest
