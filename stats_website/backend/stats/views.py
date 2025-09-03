@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.utils import timezone
@@ -39,11 +38,10 @@ def logout_view(request):
     return JsonResponse({'success': True, 'message': 'Logout successful'})
 
 
-@login_required
 def vacation_stats(request):
     """Get vacation statistics - past, ongoing, future"""
-    if not request.user.is_admin:
-        return JsonResponse({'error': 'Admin access required'}, status=403)
+    if not request.user.is_authenticated or not request.user.is_admin:
+        return JsonResponse({'error': 'Authentication required'}, status=401)
     
     today = timezone.now().date()
     
@@ -61,31 +59,28 @@ def vacation_stats(request):
     })
 
 
-@login_required
 def total_users(request):
     """Get total number of users in the system"""
-    if not request.user.is_admin:
-        return JsonResponse({'error': 'Admin access required'}, status=403)
+    if not request.user.is_authenticated or not request.user.is_admin:
+        return JsonResponse({'error': 'Authentication required'}, status=401)
     
     total = User.objects.count()
     return JsonResponse({'totalUsers': total})
 
 
-@login_required
 def total_likes(request):
     """Get total number of likes in the system"""
-    if not request.user.is_admin:
-        return JsonResponse({'error': 'Admin access required'}, status=403)
+    if not request.user.is_authenticated or not request.user.is_admin:
+        return JsonResponse({'error': 'Authentication required'}, status=401)
     
     total = Like.objects.count()
     return JsonResponse({'totalLikes': total})
 
 
-@login_required
 def likes_distribution(request):
     """Get likes distribution by vacation destination"""
-    if not request.user.is_admin:
-        return JsonResponse({'error': 'Admin access required'}, status=403)
+    if not request.user.is_authenticated or not request.user.is_admin:
+        return JsonResponse({'error': 'Authentication required'}, status=401)
     
     distribution = (Vacation.objects
                    .annotate(likes_count=Count('likes'))

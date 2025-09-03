@@ -162,3 +162,6 @@ AUTHENTICATION_BACKENDS = [
     'stats.backends.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+# Custom login URL to prevent redirects to /accounts/login/
+LOGIN_URL = '/api/login/'
