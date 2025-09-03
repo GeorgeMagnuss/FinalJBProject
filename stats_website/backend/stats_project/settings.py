@@ -161,7 +161,7 @@ CORS_ALLOW_CREDENTIALS = True
 
 # Session configuration for cross-origin requests
 SESSION_COOKIE_HTTPONLY = False
-SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_SECURE = False
 
 # Using session-based authentication instead of Django's auth system

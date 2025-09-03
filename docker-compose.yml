@@ -29,8 +29,6 @@ services:
       - DB_USER=postgres
       - DB_PASSWORD=password
       - DB_PORT=5432
-    volumes:
-      - ./vacation_website/VacationProjectGM/media:/app/media
     command: sh -c 'python manage.py migrate --run-syncdb && python manage.py populate_db && python manage.py runserver 0.0.0.0:8000'
 
   stats_backend:
@@ -49,7 +47,7 @@ services:
       - DB_USER=postgres
       - DB_PASSWORD=password
       - DB_PORT=5432
-    command: sh -c 'python manage.py migrate --run-syncdb && python manage.py runserver 0.0.0.0:8001'
+    command: sh -c 'python manage.py runserver 0.0.0.0:8001'
 
   stats_frontend:
     image: georgem94/stats-frontend:latest
