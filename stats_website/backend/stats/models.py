@@ -1,11 +1,16 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 
 class Role(models.Model):
+    """
+    Role model for user permissions - points to shared vacation database table.
+    
+    This is an unmanaged model that provides read-only access to the roles table
+    created and managed by the main vacation website application.
+    """
     """Role model for user permissions - points to shared vacation database table"""
     ROLE_CHOICES = [
         ('admin', 'Admin'),
@@ -26,25 +31,14 @@ class Role(models.Model):
         managed = False
 
 
-class UserManager(BaseUserManager):
-    """Custom user manager for email-based authentication"""
-    def create_user(self, email, password=None, **extra_fields):
-        if not email:
-            raise ValueError('The Email field must be set')
-        email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-    def create_superuser(self, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        return self.create_user(email, password, **extra_fields)
-
-
-class User(AbstractUser):
-    """Custom user model using email as username - points to shared vacation database table"""
+class VacationUser(models.Model):
+    """
+    Vacation user model for accessing shared vacation database table.
+    
+    This is an unmanaged model that provides read-only access to the users table
+    created and managed by the main vacation website application.
+    """
+    """Vacation user model for accessing shared vacation database table"""
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(max_length=100, unique=True)
@@ -54,12 +48,7 @@ class User(AbstractUser):
         related_name='users',
         db_column='role_id'
     )
-    
-    username = None
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name']
-    
-    objects = UserManager()
+    password = models.CharField(max_length=255)
     
     def __str__(self) -> str:
         return f"{self.first_name} {self.last_name}"
@@ -74,6 +63,12 @@ class User(AbstractUser):
 
 
 class Country(models.Model):
+    """
+    Country model for vacation destinations - points to shared vacation database table.
+    
+    This is an unmanaged model that provides read-only access to the countries table
+    created and managed by the main vacation website application.
+    """
     """Country model for vacation destinations - points to shared vacation database table"""
     country_name = models.CharField(max_length=100, unique=True)
     
@@ -87,6 +82,12 @@ class Country(models.Model):
 
 
 class Vacation(models.Model):
+    """
+    Vacation package model - points to shared vacation database table.
+    
+    This is an unmanaged model that provides read-only access to the vacations table
+    created and managed by the main vacation website application.
+    """
     """Vacation package model - points to shared vacation database table"""
     country = models.ForeignKey(
         Country, 
@@ -131,9 +132,15 @@ class Vacation(models.Model):
 
 
 class Like(models.Model):
+    """
+    Like relationship between users and vacations - points to shared vacation database table.
+    
+    This is an unmanaged model that provides read-only access to the likes table
+    created and managed by the main vacation website application.
+    """
     """Like relationship between users and vacations - points to shared vacation database table"""
     user = models.ForeignKey(
-        User, 
+        VacationUser, 
         on_delete=models.CASCADE,
         related_name='likes'
     )

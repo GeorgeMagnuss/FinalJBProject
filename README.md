@@ -39,16 +39,11 @@ projectRoot/
 - Docker and Docker Compose installed
 - Ports 3000, 8000, 8001, and 5432 available
 
-### Quick Start
+### Local Development
 
+**Run these two commands in order:**
 ```bash
-# Use the deployment script
-./deploy.sh
-```
-
-### Manual Deployment
-
-```bash
+docker-compose pull
 docker-compose up -d
 ```
 
@@ -84,25 +79,28 @@ The system uses a shared PostgreSQL database with the following tables:
 - `vacations` - Vacation packages
 - `likes` - User likes for vacations
 
-## AWS EC2 Deployment
+## Production Deployment (AWS EC2)
 
 ### Prerequisites
 - EC2 instance with Docker and Docker Compose installed
 - Security groups configured for ports 3000, 8000, 8001, and 5432
 
-### Deployment Steps
+### Manual Deployment Instructions
 
-1. **Upload to EC2:**
+1. **Upload docker-compose.yml to your server:**
    ```bash
    scp -i your-key.pem docker-compose.yml ubuntu@<EC2_IP>:~/
-   scp -i your-key.pem deploy.sh ubuntu@<EC2_IP>:~/
    ```
 
-2. **Deploy on EC2:**
+2. **Connect to your server and run these two commands:**
    ```bash
    ssh -i your-key.pem ubuntu@<EC2_IP>
-   chmod +x deploy.sh
-   ./deploy.sh
+   ```
+   
+   **Run exactly these two commands in order:**
+   ```bash
+   docker-compose pull
+   docker-compose up -d
    ```
 
 3. **Access Applications:**

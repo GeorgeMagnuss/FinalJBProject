@@ -29,6 +29,8 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '*']
 
 # CSRF Configuration for AWS EC2
 CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
     'http://localhost:8001',
     'http://127.0.0.1:8001', 
     'http://*.amazonaws.com',
@@ -142,8 +144,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Use stats User model that points to shared database tables
-AUTH_USER_MODEL = 'stats.User'
+# Use Django's default User model for authentication
 
 # Database table mapping to match vacation website  
 DATABASE_ROUTERS = []
@@ -158,10 +159,12 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_CREDENTIALS = True
 
-AUTHENTICATION_BACKENDS = [
-    'stats.backends.EmailBackend',
-    'django.contrib.auth.backends.ModelBackend',
-]
+# Session configuration for cross-origin requests
+SESSION_COOKIE_HTTPONLY = False
+SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SECURE = False
+
+# Using session-based authentication instead of Django's auth system
 
 # Custom login URL to prevent redirects to /accounts/login/
 LOGIN_URL = '/api/login/'

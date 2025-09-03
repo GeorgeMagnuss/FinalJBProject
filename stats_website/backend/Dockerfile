@@ -10,9 +10,11 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy all files except migrations
+# Copy all files
 COPY . .
-RUN find . -name "migrations" -type d -exec rm -rf {} + 2>/dev/null || true
+# Remove all migration files since we use unmanaged models
+RUN find . -path "*/migrations/*.py" -delete 2>/dev/null || true
+RUN find . -path "*/migrations/*.pyc" -delete 2>/dev/null || true
 
 # Create wait script
 RUN echo '#!/bin/bash\n\
@@ -22,7 +24,7 @@ until pg_isready -h $DB_HOST -p $DB_PORT -U $DB_USER; do\n\
   sleep 2\n\
 done\n\
 echo "Database is ready!"\n\
-python manage.py migrate\n\
+echo "Skipping migrations - using unmanaged models pointing to existing tables"\n\
 python manage.py runserver 0.0.0.0:8001' > /app/wait-for-db.sh && \
 chmod +x /app/wait-for-db.sh
 
