@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +21,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-2@_#hok50zyo&f*f3wdytoyy3$#1jz@%$b4kl=0(h_&kdk#)%4'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-shared-vacation-stats-key-2025')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True').lower() in ['true', '1', 'yes', 'on']
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver', '*']
+
+# CSRF Configuration for AWS EC2
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+    'http://*.amazonaws.com',
+    'http://*.compute-1.amazonaws.com',
+]
 
 
 # Application definition
@@ -77,11 +86,11 @@ WSGI_APPLICATION = 'vacation_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'vacation_db',
-        'USER': 'postgres',
-        'PASSWORD': 'password',
-        'HOST': 'db',
-        'PORT': '5432',
+        'NAME': os.environ.get('DB_NAME', 'vacation_db'),
+        'USER': os.environ.get('DB_USER', 'postgres'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'password'),
+        'HOST': os.environ.get('DB_HOST', 'db'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
 
@@ -124,7 +133,7 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = '/app/media'
 
 AUTH_USER_MODEL = 'vacations.User'
 

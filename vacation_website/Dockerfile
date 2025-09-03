@@ -7,12 +7,12 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# Copy requirements from the VacationProjectGM subdirectory
-COPY VacationProjectGM/requirements.txt .
+# Copy requirements from the correct location
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the entire VacationProjectGM project
-COPY VacationProjectGM/ .
+# Copy the entire project
+COPY . .
 
 # Create wait script
 RUN echo '#!/bin/bash\n\
