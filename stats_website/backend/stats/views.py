@@ -7,7 +7,24 @@ from django.views.decorators.http import require_http_methods
 from django.utils import timezone
 from django.db.models import Count
 import json
+import hashlib
+import time
 from .models import VacationUser, Vacation, Like
+
+def is_authenticated(request):
+    """Check if request is authenticated via session or token"""
+    # Check session-based authentication
+    if request.session.get('authenticated'):
+        return True
+    
+    # Check token-based authentication (for cross-origin requests)
+    auth_header = request.headers.get('Authorization')
+    if auth_header and auth_header.startswith('Bearer '):
+        token = auth_header.split(' ')[1]
+        # Simple token validation (in production, use proper JWT)
+        return len(token) == 32  # MD5 hash length
+    
+    return False
 
 
 @csrf_exempt
@@ -37,9 +54,16 @@ def login_view(request: HttpRequest) -> JsonResponse:
             if is_admin:
                 # For simplicity, accept hardcoded admin credentials
                 if email == 'admin@vacation.com' and password == 'admin123':
+                    # Create a simple token for authentication
+                    token = hashlib.md5(f"{email}{time.time()}".encode()).hexdigest()
                     request.session['authenticated'] = True
                     request.session['user_email'] = email
-                    return JsonResponse({'success': True, 'message': 'Login successful'})
+                    request.session['auth_token'] = token
+                    return JsonResponse({
+                        'success': True, 
+                        'message': 'Login successful',
+                        'token': token
+                    })
         except VacationUser.DoesNotExist:
             pass
             
@@ -77,7 +101,7 @@ def vacation_stats(request: HttpRequest) -> JsonResponse:
         JsonResponse: Object containing pastVacations, ongoingVacations, futureVacations counts
     """
     """Get vacation statistics - past, ongoing, future"""
-    if not request.session.get('authenticated'):
+    if not is_authenticated(request):
         return JsonResponse({'error': 'Authentication required'}, status=401)
     
     today = timezone.now().date()
@@ -107,7 +131,7 @@ def total_users(request: HttpRequest) -> JsonResponse:
         JsonResponse: Object containing totalUsers count
     """
     """Get total number of users in the system"""
-    if not request.session.get('authenticated'):
+    if not is_authenticated(request):
         return JsonResponse({'error': 'Authentication required'}, status=401)
     
     total = VacationUser.objects.count()
@@ -125,7 +149,7 @@ def total_likes(request: HttpRequest) -> JsonResponse:
         JsonResponse: Object containing totalLikes count
     """
     """Get total number of likes in the system"""
-    if not request.session.get('authenticated'):
+    if not is_authenticated(request):
         return JsonResponse({'error': 'Authentication required'}, status=401)
     
     total = Like.objects.count()
@@ -140,21 +164,22 @@ def likes_distribution(request: HttpRequest) -> JsonResponse:
         request: HTTP request object (must be authenticated)
         
     Returns:
-        JsonResponse: Array of objects with destination and likes count
+        JsonResponse: Array of objects with destination, likes count, and image
     """
     """Get likes distribution by vacation destination"""
-    if not request.session.get('authenticated'):
+    if not is_authenticated(request):
         return JsonResponse({'error': 'Authentication required'}, status=401)
     
     distribution = (Vacation.objects
                    .annotate(likes_count=Count('likes'))
-                   .values('country__country_name', 'likes_count')
+                   .values('country__country_name', 'likes_count', 'image_file')
                    .order_by('-likes_count'))
     
     result = [
         {
             'destination': item['country__country_name'],
-            'likes': item['likes_count']
+            'likes': item['likes_count'],
+            'image': item['image_file']
         }
         for item in distribution
     ]

@@ -142,12 +142,14 @@ class Like(models.Model):
     user = models.ForeignKey(
         VacationUser, 
         on_delete=models.CASCADE,
-        related_name='likes'
+        related_name='likes',
+        db_column='user_id'
     )
     vacation = models.ForeignKey(
         Vacation, 
         on_delete=models.CASCADE,
-        related_name='likes'
+        related_name='likes',
+        db_column='vacation_id'
     )
     
     def __str__(self) -> str:

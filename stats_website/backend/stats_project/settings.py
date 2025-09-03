@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-*@#j)wv*&*1wmu-(vz_qm!rqu#)mp#%1=ejuul$48iu3r1qtxh'
+SECRET_KEY = 'django-insecure-shared-vacation-stats-key-2025'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -159,10 +159,18 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_CREDENTIALS = True
 
-# Session configuration for cross-origin requests
+# Session configuration for cross-origin requests on EC2
 SESSION_COOKIE_HTTPONLY = False
-SESSION_COOKIE_SAMESITE = 'Lax'
-SESSION_COOKIE_SECURE = False
+SESSION_COOKIE_SAMESITE = 'Lax'  # Lax works better for HTTP
+SESSION_COOKIE_SECURE = False  # HTTP deployment
+SESSION_COOKIE_DOMAIN = None  # Let Django determine the domain
+SESSION_COOKIE_NAME = 'sessionid'  # Use default name for compatibility
+SESSION_COOKIE_PATH = '/'
+SESSION_COOKIE_AGE = 86400  # 24 hours
+# CSRF settings
+CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_HTTPONLY = False
 
 # Using session-based authentication instead of Django's auth system
 
