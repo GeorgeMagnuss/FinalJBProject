@@ -14,7 +14,6 @@ services:
       POSTGRES_PASSWORD: password
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./vacation_website/VacationProjectGM/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
     ports:
       - "5433:5432"
     healthcheck:
@@ -59,7 +58,7 @@ services:
       - DB_PORT=5432
     volumes:
       - ./stats_website/backend/stats:/app/stats
-    command: sh -c 'python manage.py collectstatic --noinput || true && python manage.py runserver 0.0.0.0:8001'
+    command: sh -c 'python manage.py runserver 0.0.0.0:8001'
 
   stats_frontend:
     image: georgem94/stats-frontend:latest

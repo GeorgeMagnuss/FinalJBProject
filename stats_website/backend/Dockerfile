@@ -10,7 +10,9 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Copy all files except migrations
 COPY . .
+RUN find . -name "migrations" -type d -exec rm -rf {} + 2>/dev/null || true
 
 # Create wait script
 RUN echo '#!/bin/bash\n\
