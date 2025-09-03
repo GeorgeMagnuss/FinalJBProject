@@ -31,7 +31,10 @@ def login_view(request: HttpRequest) -> JsonResponse:
         # Check if user exists in vacation database and is admin
         try:
             vacation_user = VacationUser.objects.get(email=email)
-            if vacation_user.role.role_name == 'admin':
+            # Check if user is admin - either through is_admin field or role
+            is_admin = vacation_user.is_admin or (vacation_user.role and vacation_user.role.role_name == 'admin')
+            
+            if is_admin:
                 # For simplicity, accept hardcoded admin credentials
                 if email == 'admin@vacation.com' and password == 'admin123':
                     request.session['authenticated'] = True
