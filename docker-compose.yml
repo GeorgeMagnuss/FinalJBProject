@@ -17,6 +17,7 @@ services:
 
   vacation_website:
     image: georgem94/vacation-website:latest
+    platform: linux/amd64
     ports:
       - "8000:8000"
     depends_on:
