@@ -1,142 +1,129 @@
-# Vacation Management System - Complete Project
+# Vacation Management System
+**Python Full Stack Web Developer - Course Project Part III**
 
-**Student Name:** George Mattar
+**Student:** George Mattar
 
-This is the complete vacation management system consisting of two main applications:
-1. **Vacation Website** - Main vacation management application
-2. **Statistics Website** - Admin statistics dashboard
+A comprehensive vacation management system with real-time statistics dashboard, built using modern web technologies and deployed on AWS Cloud.
 
-## Project Structure
+## Quick Start
 
-```
-projectRoot/
-├── vacation_website/          ← Part 2 project (vacation management)
-│   ├── Dockerfile
-│   ├── initial_data.json
-│   ├── init_db.sql
-│   └── ... (Django project files)
-├── stats_website/
-│   ├── backend/              ← Stats API server
-│   │   ├── Dockerfile
-│   │   └── ... (Django project files)
-│   ├── frontend/             ← Stats React client
-│   │   ├── Dockerfile
-│   │   └── ... (React project files)
-└── docker-compose.yml
-```
-
-## Technologies Used
-
-- **Database:** PostgreSQL
-- **Backend:** Django (Python)
-- **Frontend:** React (TypeScript)
-- **Containerization:** Docker & Docker Compose
-- **Cloud Deployment:** AWS EC2
-
-## How to Run the Complete Project
-
-### Prerequisites
-- Docker and Docker Compose installed
-- Ports 3000, 8000, 8001, and 5432 available
-
-### Local Development
-
-**Run these two commands in order:**
 ```bash
-docker-compose pull
-docker-compose up -d
+docker-compose up
 ```
 
-This will start all services:
-- **Database:** PostgreSQL on port 5432  
-- **Vacation Website:** http://localhost:8000
-- **Stats Backend API:** http://localhost:8001
-- **Stats Frontend:** http://localhost:3000
-
-### Default User Credentials
-
-#### Admin User
-- **Email:** admin@vacation.com
-- **Password:** admin123
-
-#### Regular User
-- **Email:** user@vacation.com
-- **Password:** user123
-
-### Access Points
+**Access Points:**
 - **Vacation Management:** http://localhost:8000
 - **Statistics Dashboard:** http://localhost:3000
 
-## API Endpoints (Stats Backend)
+**Admin Credentials:** admin@vacation.com / admin123
 
-- `POST /api/login/` - Admin login
-- `POST /api/logout/` - Logout
-- `GET /api/stats/vacations/` - Vacation statistics
-- `GET /api/total/users/` - Total users count
-- `GET /api/total/likes/` - Total likes count
-- `GET /api/distribution/likes/` - Likes distribution by destination
+## Project Overview
+
+This system consists of two integrated applications:
+
+### 1. Vacation Management Website (Django)
+- User registration and authentication
+- Browse and search vacation packages
+- Like/unlike destinations
+- Admin panel for vacation management
+- Image gallery with destination photos
+
+### 2. Statistics Dashboard (React + Django API)
+- Admin-only access to system analytics
+- Real-time vacation statistics (past/ongoing/future)
+- User engagement metrics
+- Interactive likes distribution with visual charts
+- Auto-refresh capabilities
+
+## Technical Architecture
+
+### Backend
+- **Django REST Framework** for statistics API
+- **PostgreSQL** database shared between services
+- **CORS enabled** for cross-service communication
+- **Session-based authentication**
+
+### Frontend  
+- **React with TypeScript** for statistics dashboard
+- **Django templates** for vacation website
+- **Responsive design** with modern CSS
+- **Real-time data updates**
+
+### Infrastructure
+- **Docker Compose** orchestration
+- **Multi-container deployment**
+- **PostgreSQL database** with automatic initialization
+- **AWS EC2** cloud deployment
+
+## API Endpoints
+
+### Statistics API (`http://localhost:8001/api/`)
+- `POST /login/` - Admin authentication
+- `POST /logout/` - Session termination  
+- `GET /stats/vacations/` - Vacation timeline statistics
+- `GET /total/users/` - Total registered users
+- `GET /total/likes/` - Total user likes
+- `GET /distribution/likes/` - Likes by destination
+
+### Example API Responses
+```json
+// /stats/vacations/
+{"pastVacations": 12, "ongoingVacations": 7, "futureVacations": 15}
+
+// /total/users/  
+{"totalUsers": 37}
+
+// /distribution/likes/
+[{"destination": "Rome", "likes": 3}, {"destination": "Rhodes", "likes": 8}]
+```
 
 ## Database Schema
 
-The system uses a shared PostgreSQL database with the following tables:
-- `roles` - User roles (admin/user)
-- `users` - System users
-- `countries` - Vacation destinations
-- `vacations` - Vacation packages
-- `likes` - User likes for vacations
+**Core Tables:**
+- `roles` - User access levels (admin/user)
+- `users` - Account management with role assignments
+- `countries` - Destination reference data
+- `vacations` - Travel packages with dates and descriptions
+- `likes` - User preferences tracking
 
-## Production Deployment (AWS EC2)
+## Docker Services
 
-### Prerequisites
-- EC2 instance with Docker and Docker Compose installed
-- Security groups configured for ports 3000, 8000, 8001, and 5432
+| Service | Image | Port | Description |
+|---------|-------|------|-------------|
+| `db` | `postgres:15` | 5432 | PostgreSQL database |
+| `vacation_website` | `georgem94/vacation-website:latest` | 8000 | Django vacation app |
+| `stats_backend` | `georgem94/stats-backend:latest` | 8001 | Statistics API |
+| `stats_frontend` | `georgem94/stats-frontend:latest` | 3000 | React dashboard |
 
-### Manual Deployment Instructions
+## Development Features
 
-1. **Upload docker-compose.yml to your server:**
-   ```bash
-   scp -i your-key.pem docker-compose.yml ubuntu@<EC2_IP>:~/
-   ```
+### Security
+- Environment variables for configuration
+- Admin-only access to statistics
+- CORS protection between services
+- Input validation and SQL injection prevention
 
-2. **Connect to your server and run these two commands:**
-   ```bash
-   ssh -i your-key.pem ubuntu@<EC2_IP>
-   ```
-   
-   **Run exactly these two commands in order:**
-   ```bash
-   docker-compose pull
-   docker-compose up -d
-   ```
+### User Experience
+- Intuitive navigation between applications
+- Real-time data updates without page refresh
+- Error handling with user-friendly messages
+- Mobile-responsive design
 
-3. **Access Applications:**
-   - **Vacation Management:** `http://<EC2_IP>:8000`
-   - **Statistics Dashboard:** `http://<EC2_IP>:3000`
+### Code Quality
+- Clean code with proper naming conventions
+- Separated concerns across services
+- Comprehensive error handling
+- Type hints and documentation
 
-### Docker Images
-Pre-built multi-platform images available on Docker Hub:
-- `georgem94/vacation-website:latest`
-- `georgem94/stats-backend:latest`  
-- `georgem94/stats-frontend:latest`
+## Environment Configuration
 
-## Project Features
+Sample environment variables are provided in `.env.sample` files for reference. The production deployment uses environment variables configured directly in `docker-compose.yml`.
 
-### Vacation Website (Port 8000)
-- Browse vacation packages
-- User registration and authentication
-- Like/unlike vacation packages
-- Admin panel for managing vacations
+## Course Compliance
 
-### Statistics Dashboard (Port 3000)
-- Admin-only access
-- Real-time vacation statistics
-- User engagement metrics
-- Likes distribution analysis
-
-## Resolved Issues
-
-✅ **Database Migration Conflicts** - Implemented unmanaged models for stats backend  
-✅ **Frontend API Communication** - Fixed URL routing with `/api/` prefix  
-✅ **Authentication Failures** - Corrected admin user password and role relationships  
-✅ **Docker Multi-platform Support** - Built for both AMD64 and ARM64 architectures  
-✅ **Production Configuration** - Environment-specific API URLs and CORS settings
+This project fulfills all Course Project Part III requirements:
+- ✅ PostgreSQL database integration
+- ✅ Django backend with required API routes
+- ✅ React frontend with statistics visualization
+- ✅ Docker containerization and composition
+- ✅ AWS Cloud deployment capability
