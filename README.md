@@ -53,9 +53,15 @@ This will start all services:
 - **Stats Backend API:** http://localhost:8001
 - **Stats Frontend:** http://localhost:3000
 
-### Default Admin Credentials
+### Default User Credentials
+
+#### Admin User
 - **Email:** admin@vacation.com
 - **Password:** admin123
+
+#### Regular User
+- **Email:** user@vacation.com
+- **Password:** user123
 
 ### Access Points
 - **Vacation Management:** http://localhost:8000
