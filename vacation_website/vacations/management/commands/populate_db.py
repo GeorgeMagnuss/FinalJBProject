@@ -20,7 +20,7 @@ class Command(BaseCommand):
 
         # Create users
         admin_user, created = User.objects.get_or_create(
-            email='admin@example.com',
+            email='admin@vacation.com',
             defaults={
                 'first_name': 'Admin',
                 'last_name': 'User',
@@ -30,7 +30,7 @@ class Command(BaseCommand):
             }
         )
         if created:
-            admin_user.set_password('adminpass')
+            admin_user.set_password('admin123')
             admin_user.save()
             self.stdout.write(f'Created admin user: {admin_user.email}')
         
