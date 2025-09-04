@@ -122,7 +122,7 @@ def add_vacation_view(request):
                 path = default_storage.save(filename, ContentFile(image.read()))
                 vacation.image_file = os.path.basename(path)
             else:
-                vacation.image_file = 'default.jpg'
+                vacation.image_file = 'images/vacation_images/default.jpg'
             
             vacation.save()
             messages.success(request, 'Vacation added successfully!')

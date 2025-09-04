@@ -74,7 +74,7 @@ class Command(BaseCommand):
                 'start_date': base_start + timedelta(days=0),
                 'end_date': base_start + timedelta(days=9),
                 'price': 1500,
-                'image_file': 'telaviv.jpg'
+                'image_file': 'images/vacation_images/telaviv.jpg'
             },
             {
                 'country': 'Spain',
@@ -82,7 +82,7 @@ class Command(BaseCommand):
                 'start_date': base_start + timedelta(days=15),
                 'end_date': base_start + timedelta(days=25),
                 'price': 1200,
-                'image_file': 'madrid.jpg'
+                'image_file': 'images/vacation_images/madrid.jpg'
             },
             {
                 'country': 'Italy',
@@ -90,7 +90,7 @@ class Command(BaseCommand):
                 'start_date': base_start + timedelta(days=30),
                 'end_date': base_start + timedelta(days=39),
                 'price': 1800,
-                'image_file': 'rome.jpg'
+                'image_file': 'images/vacation_images/rome.jpg'
             },
             {
                 'country': 'France',
@@ -98,7 +98,7 @@ class Command(BaseCommand):
                 'start_date': base_start + timedelta(days=45),
                 'end_date': base_start + timedelta(days=51),
                 'price': 2000,
-                'image_file': 'paris.jpg'
+                'image_file': 'images/vacation_images/paris.jpg'
             },
             {
                 'country': 'Germany',
@@ -106,7 +106,7 @@ class Command(BaseCommand):
                 'start_date': base_start + timedelta(days=60),
                 'end_date': base_start + timedelta(days=67),
                 'price': 1400,
-                'image_file': 'berlin.jpg'
+                'image_file': 'images/vacation_images/berlin.jpg'
             },
             {
                 'country': 'Japan',
@@ -114,7 +114,7 @@ class Command(BaseCommand):
                 'start_date': base_start + timedelta(days=75),
                 'end_date': base_start + timedelta(days=88),
                 'price': 2500,
-                'image_file': 'tokyo.jpg'
+                'image_file': 'images/vacation_images/tokyo.jpg'
             },
             {
                 'country': 'Brazil',
@@ -122,7 +122,7 @@ class Command(BaseCommand):
                 'start_date': base_start + timedelta(days=90),
                 'end_date': base_start + timedelta(days=98),
                 'price': 2200,
-                'image_file': 'rio.jpg'
+                'image_file': 'images/vacation_images/rio.jpg'
             },
             {
                 'country': 'Argentina',
@@ -130,7 +130,7 @@ class Command(BaseCommand):
                 'start_date': base_start + timedelta(days=105),
                 'end_date': base_start + timedelta(days=112),
                 'price': 1900,
-                'image_file': 'buenosaires.jpg'
+                'image_file': 'images/vacation_images/buenosaires.jpg'
             },
             {
                 'country': 'United States',
@@ -138,7 +138,7 @@ class Command(BaseCommand):
                 'start_date': base_start + timedelta(days=120),
                 'end_date': base_start + timedelta(days=130),
                 'price': 1600,
-                'image_file': 'nyc.jpg'
+                'image_file': 'images/vacation_images/nyc.jpg'
             },
             {
                 'country': 'Australia',
@@ -146,7 +146,7 @@ class Command(BaseCommand):
                 'start_date': base_start + timedelta(days=135),
                 'end_date': base_start + timedelta(days=145),
                 'price': 2300,
-                'image_file': 'sydney.jpg'
+                'image_file': 'images/vacation_images/sydney.jpg'
             },
             {
                 'country': 'Colombia',
@@ -154,7 +154,7 @@ class Command(BaseCommand):
                 'start_date': base_start + timedelta(days=150),
                 'end_date': base_start + timedelta(days=157),
                 'price': 2100,
-                'image_file': 'medellin.jpg'
+                'image_file': 'images/vacation_images/medellin.jpg'
             },
             {
                 'country': 'United States',
@@ -162,7 +162,7 @@ class Command(BaseCommand):
                 'start_date': base_start + timedelta(days=165),
                 'end_date': base_start + timedelta(days=175),
                 'price': 1800,
-                'image_file': 'losangeles.jpg'
+                'image_file': 'images/vacation_images/losangeles.jpg'
             }
         ]
 
